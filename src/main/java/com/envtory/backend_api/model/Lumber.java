@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -24,6 +25,13 @@ public class Lumber {
     private String grade;
     private UUID id;
 
+
+    //empty constructor for database retrieval
+    public Lumber() {
+
+    }
+
+    
     //Constructors
     public Lumber(String species, double length, double width, double thickness, String grade) {
         this.species = species;
@@ -31,7 +39,6 @@ public class Lumber {
         this.width = width;
         this.thickness = thickness;
         this.grade = grade;
-        this.id = UUID.randomUUID();
     }
 
     //Business Logic: Calculates total board footage
@@ -91,6 +98,9 @@ public class Lumber {
         this.thickness = thickness;
     }
 
+
+    //Added @JsonIgnore to prevent this setter from being used when JSON is translated into a Java object
+    @JsonIgnore
     //Overloaded setter for Thickness, takes an interger and converts it to a decimal
     public void setThickness(int quarterCount) {
         this.thickness = quarterCount / 4.0; 
@@ -98,10 +108,6 @@ public class Lumber {
 
     public void setGrade(String grade) {
         this.grade = grade;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
     
 

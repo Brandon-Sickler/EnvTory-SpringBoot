@@ -54,7 +54,6 @@ public class LumberBundle {
         this.width = width;
         this.grade = grade;
         this.moistureState = startingState;
-        this.id = UUID.randomUUID();
         this.stackedBoards = new ArrayList<>();
     }
 
@@ -91,7 +90,7 @@ public class LumberBundle {
         return totalFootage;
     }
 
-    //Getters and Setters
+    //Getters for the bundles properties
     public String getSpecies() {
         return species;
     }
@@ -116,20 +115,35 @@ public class LumberBundle {
         return stackedBoards;
     }
 
-    public MoistureState getState() {
+    public MoistureState getMoistureState() {
         return moistureState;
     }
 
-   public void setState(MoistureState state) {
-    this.moistureState = state;
-   }
 
     public double getManualBlockFootage() {
         return manualBlockFootage;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+
+    //setters for the bundle's properties
+    public void setSpecies(String species) {
+        this.species = species;
     }
+
+    public void setLength(double length) {
+        this.length = length;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public void setMoistureState(MoistureState state) {
+    this.moistureState = state;
+   }
 
 }
