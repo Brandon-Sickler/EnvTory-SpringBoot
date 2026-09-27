@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 import com.envtory.backend_api.model.Lumber;
 import com.envtory.backend_api.repository.LumberRepository;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 
 @RestController
@@ -29,6 +30,12 @@ public class LumberBundleController {
     @GetMapping
     public List<LumberBundle> getAllBundles() {
         return repository.findAll();
+    }
+
+    @GetMapping("/{bundleId}")
+    public LumberBundle getBundle(@PathVariable UUID bundleId) {
+        return repository.findById(bundleId)
+                .orElseThrow(() -> new RuntimeException("Bundle not found with ID: " + bundleId));
     }
 
     @PostMapping
@@ -53,6 +60,19 @@ public class LumberBundleController {
             return lumberRepository.save(newBoard);
         } else {
             throw new RuntimeException("Bundle not found with ID: " + bundleId);
+        }
+    }
+
+    //The undo endpoint to delete a specific board
+    @DeleteMapping("/{bundleId}/boards/{boardId}")
+    public String deleteBoard(@PathVariable UUID bundleId, @PathVariable UUID boardId) {
+
+        //check if the board actually exsists before trying to delete it
+        if (lumberRepository.existsById(boardId)) {
+            lumberRepository.deleteById(boardId);
+            return "Board " + boardId + " was successfully deleted from the bundle.";
+        } else {
+            throw new RuntimeException("Board not found with ID: " + boardId);
         }
     }
 }
