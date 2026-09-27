@@ -10,7 +10,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -37,8 +36,7 @@ public class LumberBundle {
     //set this variable to -1.0 to indicate that no manual volume has been entered yet.
     private double manualBlockFootage = -1.0;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bundle_id")
+    @OneToMany(mappedBy = "bundle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lumber> stackedBoards = new ArrayList<>();
 
     //Empty constructor for database retrieval

@@ -5,17 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.JoinColumn;
 
 
 @Entity
 @Table(name = "lumber_boards")
 public class Lumber {
 
-    //Id and generated value for database
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
 
     //Variables
     private String species;
@@ -23,7 +22,15 @@ public class Lumber {
     private double width;
     private double thickness;
     private String grade;
+    //Id and generated value for database
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @ManyToOne 
+    @JoinColumn(name = "bundle_id")
+    @JsonIgnore
+    private LumberBundle bundle;
 
 
     //empty constructor for database retrieval
@@ -98,17 +105,26 @@ public class Lumber {
         this.thickness = thickness;
     }
 
+    /* 
 
+    ###############COMMENTED OUT THIS CODE: HAVING DESERIALIZATION ISSUES##################//
+                        ################################################
     //Added @JsonIgnore to prevent this setter from being used when JSON is translated into a Java object
     @JsonIgnore
     //Overloaded setter for Thickness, takes an interger and converts it to a decimal
     public void setThickness(int quarterCount) {
         this.thickness = quarterCount / 4.0; 
     }
-
+                    #########################################
+    #####################################################################
+    */
     public void setGrade(String grade) {
         this.grade = grade;
     }
     
+    public void setBundle(LumberBundle bundle) {
+        this.bundle = bundle;
+    }
+
 
 }
