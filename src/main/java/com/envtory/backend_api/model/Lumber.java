@@ -28,7 +28,7 @@ public class Lumber {
     private UUID id;
 
     @ManyToOne 
-    @JoinColumn(name = "bundle_id")
+    @JoinColumn(name = "bundle_id", nullable = false)
     @JsonIgnore
     private LumberBundle bundle;
 
