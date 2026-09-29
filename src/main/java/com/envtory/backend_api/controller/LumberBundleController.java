@@ -15,6 +15,7 @@ import java.util.UUID;
 import com.envtory.backend_api.model.Lumber;
 import com.envtory.backend_api.repository.LumberRepository;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
@@ -71,6 +72,27 @@ public class LumberBundleController {
         if (lumberRepository.existsById(boardId)) {
             lumberRepository.deleteById(boardId);
             return "Board " + boardId + " was successfully deleted from the bundle.";
+        } else {
+            throw new RuntimeException("Board not found with ID: " + boardId);
+        }
+    }
+
+    //the update endpoint to update a specific board
+    @PutMapping("/{bundleId}/boards/{boardId}")
+    public Lumber updateBoard(@PathVariable UUID bundleId, @PathVariable UUID boardId, @RequestBody Lumber updateBoardData) {
+        Optional<Lumber> optionalBoard = lumberRepository.findById(boardId);
+
+        if (optionalBoard.isPresent()) {
+            Lumber existingBoard = optionalBoard.get();
+
+            //overwrite the old data with the new incoming data
+            existingBoard.setSpecies(updateBoardData.getSpecies());
+            existingBoard.setLength(updateBoardData.getLength());
+            existingBoard.setWidth(updateBoardData.getWidth());
+            existingBoard.setThickness(updateBoardData.getThickness());
+            existingBoard.setGrade(updateBoardData.getGrade());
+
+            return lumberRepository.save(existingBoard);
         } else {
             throw new RuntimeException("Board not found with ID: " + boardId);
         }
