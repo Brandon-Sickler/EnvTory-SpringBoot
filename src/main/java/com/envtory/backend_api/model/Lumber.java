@@ -17,18 +17,27 @@ public class Lumber {
 
 
     //Variables
-    private String species;
-    private double length;
-    private double width;
-    private double thickness;
-    private String grade;
-    //Id and generated value for database
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private String species;
+    private double thickness;
+    private String grade;
+
+    //nullable dimensions
+    private Double length;
+    private Double width;
+    private Integer surfaceMeasure;
+    private Double boardFootage;
+
     @ManyToOne 
-    @JoinColumn(name = "bundle_id", nullable = false)
+    @JoinColumn(name = "run_id", nullable = false)
+    @JsonIgnore 
+    private Run run;
+
+    @ManyToOne
+    @JoinColumn(name = "bundle_id", nullable = true)
     @JsonIgnore
     private LumberBundle bundle;
 
@@ -55,21 +64,6 @@ public class Lumber {
 
 
     //Getters and Setters
-    public String getSpecies() {
-        return species;
-    }
-
-    public double getLength() {
-        return length;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public double getThickness() {
-        return thickness;
-    }
 
     //Formatted helper Getter for Thickness, Displays text like "4/4"
     public String getThicknessAsQuarters() {
@@ -77,12 +71,19 @@ public class Lumber {
         return quarters + "/4";
     }
 
-    public String getGrade() {
-        return grade;
-    }
 
     public UUID getId() {
         return id;
+    }
+
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+
+    public String getSpecies() {
+        return species;
     }
 
 
@@ -91,13 +92,8 @@ public class Lumber {
     }
 
 
-    public void setLength(double length) {
-        this.length = length;
-    }
-
-
-    public void setWidth(double width) {
-        this.width = width;
+    public double getThickness() {
+        return thickness;
     }
 
 
@@ -105,26 +101,76 @@ public class Lumber {
         this.thickness = thickness;
     }
 
-    /* 
 
-    ###############COMMENTED OUT THIS CODE: HAVING DESERIALIZATION ISSUES##################//
-                        ################################################
-    //Added @JsonIgnore to prevent this setter from being used when JSON is translated into a Java object
-    @JsonIgnore
-    //Overloaded setter for Thickness, takes an interger and converts it to a decimal
-    public void setThickness(int quarterCount) {
-        this.thickness = quarterCount / 4.0; 
+    public String getGrade() {
+        return grade;
     }
-                    #########################################
-    #####################################################################
-    */
+
+
     public void setGrade(String grade) {
         this.grade = grade;
     }
-    
+
+
+    public Double getLength() {
+        return length;
+    }
+
+
+    public void setLength(Double length) {
+        this.length = length;
+    }
+
+
+    public Double getWidth() {
+        return width;
+    }
+
+
+    public void setWidth(Double width) {
+        this.width = width;
+    }
+
+
+    public Integer getSurfaceMeasure() {
+        return surfaceMeasure;
+    }
+
+
+    public void setSurfaceMeasure(Integer surfaceMeasure) {
+        this.surfaceMeasure = surfaceMeasure;
+    }
+
+
+    public Double getBoardFootage() {
+        return boardFootage;
+    }
+
+
+    public void setBoardFootage(Double boardFootage) {
+        this.boardFootage = boardFootage;
+    }
+
+
+    public Run getRun() {
+        return run;
+    }
+
+
+    public void setRun(Run run) {
+        this.run = run;
+    }
+
+
+    public LumberBundle getBundle() {
+        return bundle;
+    }
+
+
     public void setBundle(LumberBundle bundle) {
         this.bundle = bundle;
     }
 
+    
 
 }

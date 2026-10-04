@@ -1,17 +1,19 @@
 package com.envtory.backend_api.model;
 
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ElementCollection;
 
 
 @Entity
@@ -25,19 +27,36 @@ public class LumberBundle {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
-    private String species;
-    private double length;
-    private double width;
-    private String grade;
-
     @Enumerated(EnumType.STRING)
     private MoistureState moistureState;
 
-    //set this variable to -1.0 to indicate that no manual volume has been entered yet.
-    private double manualBlockFootage = -1.0;
+    @Column(nullable = true)
+    private String packNumber;
 
-    @OneToMany(mappedBy = "bundle", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Lumber> stackedBoards = new ArrayList<>();
+    @Column(nullable = false)
+    private String species;
+
+    @Column(nullable = false)
+    private double thickness;
+
+    @Column(nullable = false)
+    private String grade;
+
+    @ElementCollection
+    private List<Double> lengthsIncluded;
+
+    @Column(nullable = false)
+    private double totalBoardFootage;
+
+    @ManyToOne 
+    @JoinColumn(name = "run_id", nullable = true)
+    private Run run;
+
+    @Column(nullable = true)
+    private UUID loadId;
+
+    @OneToMany(mappedBy = "bundle")
+    private List<Lumber> boards;
 
     //Empty constructor for database retrieval
     public LumberBundle() {
@@ -45,103 +64,127 @@ public class LumberBundle {
     }
     
 
-    //Constructors
-    public LumberBundle(String species, double length, double width, String grade, MoistureState startingState) {
+    //Constructor
+    public LumberBundle(String species, double thickness, String grade, MoistureState startingState) {
         this.species = species;
-        this.length = length;
-        this.width = width;
+        this.thickness = thickness;
         this.grade = grade;
         this.moistureState = startingState;
-        this.stackedBoards = new ArrayList<>();
+        this.totalBoardFootage = 0.0;
+        
     }
 
-    //Business Logic
 
-    //adds an individual board to the pack's ArrayList
-    public void addBoard(Lumber newBoard) {
-        this.stackedBoards.add(newBoard);
-    }
-
-    //replaces an incorrect board at a specific index
-    public void replaceBoard(int index, Lumber correctBoard) {
-        //enforce safety by checking if the index is valid
-        if (index >= 0 && index < stackedBoards.size()) {
-            this.stackedBoards.set(index, correctBoard);
-        }
-    }
-
-    //allows a grader to input a hand tally or block tally override
-    public void setManualBlockFootage(double footage) {
-        this.manualBlockFootage = footage;
-    }
-
-    //checks for a block tally override before looping the array
-    public double getTotalBoardFootage() {
-
-        if (this.manualBlockFootage != -1.0) {
-            return this.manualBlockFootage;
-        }
-        double totalFootage = 0.0;
-        for (Lumber board : stackedBoards) {
-            totalFootage += board.calculateBoardFootage();
-        }
-        return totalFootage;
-    }
-
-    //Getters for the bundles properties
-    public String getSpecies() {
-        return species;
-    }
-
-    public double getLength() {
-        return length;
-    }
-
-    public double getWidth() {
-        return width;
-    }
+    //Getters and Setters
 
     public UUID getId() {
         return id;
     }
 
-    public String getGrade() {
-        return grade;
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public List<Lumber> getStackedBoards() {
-        return stackedBoards;
-    }
 
     public MoistureState getMoistureState() {
         return moistureState;
     }
 
 
-    public double getManualBlockFootage() {
-        return manualBlockFootage;
+    public void setMoistureState(MoistureState moistureState) {
+        this.moistureState = moistureState;
     }
 
 
-    //setters for the bundle's properties
+    public String getPackNumber() {
+        return packNumber;
+    }
+
+
+    public void setPackNumber(String packNumber) {
+        this.packNumber = packNumber;
+    }
+
+
+    public String getSpecies() {
+        return species;
+    }
+
+
     public void setSpecies(String species) {
         this.species = species;
     }
 
-    public void setLength(double length) {
-        this.length = length;
+
+    public double getThickness() {
+        return thickness;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
+
+    public void setThickness(double thickness) {
+        this.thickness = thickness;
     }
+
+
+    public String getGrade() {
+        return grade;
+    }
+
 
     public void setGrade(String grade) {
         this.grade = grade;
     }
 
-    public void setMoistureState(MoistureState state) {
-    this.moistureState = state;
-   }
+
+    public List<Double> getLengthsIncluded() {
+        return lengthsIncluded;
+    }
+
+
+    public void setLengthsIncluded(List<Double> lengthsIncluded) {
+        this.lengthsIncluded = lengthsIncluded;
+    }
+
+
+    public double getTotalBoardFootage() {
+        return totalBoardFootage;
+    }
+
+
+    public void setTotalBoardFootage(double totalBoardFootage) {
+        this.totalBoardFootage = totalBoardFootage;
+    }
+
+
+    public Run getRun() {
+        return run;
+    }
+
+
+    public void setRun(Run run) {
+        this.run = run;
+    }
+
+
+    public UUID getLoadId() {
+        return loadId;
+    }
+
+
+    public void setLoadId(UUID loadId) {
+        this.loadId = loadId;
+    }
+
+
+    public List<Lumber> getBoards() {
+        return boards;
+    }
+
+
+    public void setBoards(List<Lumber> boards) {
+        this.boards = boards;
+    }
+
 
 }
