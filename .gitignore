@@ -29,5 +29,30 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+
+src/main/resources/application.properties
+
+### Build Output ###
+build/
+.gradle/
+out/
+
+### IDE Files (VS Code, IntelliJ, Eclipse) ###
 .vscode/
+.idea/
+.project
+.classpath
+.settings/
+
+### Logs ###
+*.log
+logs/
+
+### OS Generated Files ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
