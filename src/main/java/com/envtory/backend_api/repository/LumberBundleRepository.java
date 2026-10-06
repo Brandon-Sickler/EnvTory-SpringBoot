@@ -10,3 +10,4 @@ import java.util.List;
 public interface LumberBundleRepository extends JpaRepository<LumberBundle, UUID> {
     List<LumberBundle> findByLoadIdIsNull();
 }
+

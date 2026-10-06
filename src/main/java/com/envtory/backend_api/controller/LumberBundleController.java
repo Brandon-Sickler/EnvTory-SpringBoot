@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bundles")
@@ -43,4 +43,15 @@ public class LumberBundleController {
         LumberBundle updatedBundle = bundleRepository.save(bundle);
         return ResponseEntity.ok(updatedBundle);
     }
+
+    @PostMapping("/{bundleId}/lengths")
+    public ResponseEntity<Void> addLengthToBundle(@PathVariable UUID bundleId, @RequestBody Map<String, Object> payload) {
+    bundleRepository.findById(bundleId).ifPresent(bundle -> {
+        Number length = (Number) payload.get("lengths_included");
+        bundle.getLengthsIncluded().add(length.doubleValue());
+        bundleRepository.save(bundle);
+    });
+    return ResponseEntity.ok().build();
+}
+
 }
